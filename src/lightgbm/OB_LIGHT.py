@@ -15,8 +15,13 @@ import lightgbm as lgb
 
 
 
+
+#FEATURE ENGINEERING QUE HAY QUE OPTIMIZAR
+input='FE001'
+
 #COLOCO NOMBRE DEL EXPERIMENTO
-experimento="HT_102_logy"
+experimento=f"HT002-{input}"
+
 
 #Experimento con y transformada 
 
@@ -24,11 +29,13 @@ experimento="HT_102_logy"
 
 
 #CARGO DATASET
+
 os.chdir("C:/Users/vyago/Desktop/Yago/Competencia/ypf")  # Directorio actual
-train = pd.read_csv("../Dataset/dataset_train.csv")
+train = pd.read_csv(f"../Exp/{input}/train.csv")
+train.head()
 
 train = train.select_dtypes("number")
-y_train = train["delta_WHP"].apply(lambda x : np.log(x) if x!=0 else 0)
+y_train = np.sqrt(train["delta_WHP"])
 X_train = train[train.columns.drop(["delta_WHP","ID_FILA"])]#,"ID_EVENTO"])]
 
 MAX_EVALS = 500
@@ -53,7 +60,7 @@ def objective(params, n_folds = N_FOLDS):
                           'min_data_in_leaf']:
        params[parameter_name] = int(params[parameter_name])
    start = timer()
-   params["max_bin"] = 128
+   params["max_bin"] = 256
    params['objective'] = 'regression'
    params['feature_pre_filter'] = False
    # realiza n_folds de cross validation
@@ -100,8 +107,8 @@ bayes_trials = Trials()
 
 # archivo para guardar los primeros resultados
 
-if not os.path.isdir(f'./exp/{experimento}'):
-    os.makedirs(f'./Exp/{experimento}')
+if not os.path.isdir(f'../Exp/{experimento}'):
+    os.makedirs(f'../Exp/{experimento}')
 
 out_file = f'../Exp/{experimento}/HT.csv'
 of_connection = open(out_file, 'w')

@@ -42,5 +42,5 @@ train = dataset[dataset["delta_WHP"].notna()]
 if not os.path.isdir(f'../Exp/{experimento}'):
     os.makedirs(f'../Exp/{experimento}')
  
-train.to_csv(f"../Exp/{experimento}/train.csv")
-test.to_csv(f"../Exp/{experimento}/test.csv")
+train.to_csv(f"../Exp/{experimento}/train.csv",index=False)
+test.to_csv(f"../Exp/{experimento}/test.csv",index=False)
