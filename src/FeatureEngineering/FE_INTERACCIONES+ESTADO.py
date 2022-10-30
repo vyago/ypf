@@ -19,6 +19,7 @@ experimento = 'FE002'
 oil_gas = pd.get_dummies(dataset["FLUIDO"])
 campo = pd.get_dummies(dataset["CAMPO"])
 estado = dataset["ESTADO"].apply(lambda x : 1 if x=="Abierto" else 0)
+lineamiento = dataset["LINEAMIENTO"].apply(lambda x: 1 if x=="SI" else 0)
 
 
 # INTERACCIÓN ENTRE DISTANCIAS 
