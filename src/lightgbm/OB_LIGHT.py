@@ -17,10 +17,10 @@ import lightgbm as lgb
 
 
 #FEATURE ENGINEERING QUE HAY QUE OPTIMIZAR
-input='FE001'
+input='FE002'
 
 #COLOCO NOMBRE DEL EXPERIMENTO
-experimento=f"HT002-{input}"
+experimento=f"HT001-{input}"
 
 
 #Experimento con y transformada 
