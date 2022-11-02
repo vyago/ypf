@@ -52,7 +52,7 @@ def objective(params, n_folds = N_FOLDS):
    #subsample = params['boosting_type'].get('subsample', 1.0)
    
    # Extrae el boosting type
-   params['boosting_type'] = 'gbdt'
+   params['boosting_type'] = 'dart'
    params['subsample'] = 1.0
   
    # Se asegura que los parametros que tienen que ser enteros sean enteros
@@ -61,6 +61,9 @@ def objective(params, n_folds = N_FOLDS):
        params[parameter_name] = int(params[parameter_name])
    start = timer()
    params["max_bin"] = 256
+   params["drop_rate"] = 0.1
+   params["max_drop"] = 50
+   params["skip_drop"] = 0.5 
    params['objective'] = 'regression'
    params['feature_pre_filter'] = False
    # realiza n_folds de cross validation
@@ -122,7 +125,7 @@ of_connection.close()
 # Variable Global
 global  ITERATION
 ITERATION = 0
-MAX_EVALS = 50
+MAX_EVALS = 20
 
 # Crea un dataset lgb
 train_set = lgb.Dataset(X_train, label = y_train)
