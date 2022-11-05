@@ -17,7 +17,7 @@ import lightgbm as lgb
 
 
 #FEATURE ENGINEERING QUE HAY QUE OPTIMIZAR
-input='FE002'
+input='TS001-FE002'
 
 #COLOCO NOMBRE DEL EXPERIMENTO
 experimento=f"HT001-{input}"
@@ -52,7 +52,7 @@ def objective(params, n_folds = N_FOLDS):
    #subsample = params['boosting_type'].get('subsample', 1.0)
    
    # Extrae el boosting type
-   params['boosting_type'] = 'dart'
+   params['boosting_type'] = 'gbdt'
    params['subsample'] = 1.0
   
    # Se asegura que los parametros que tienen que ser enteros sean enteros

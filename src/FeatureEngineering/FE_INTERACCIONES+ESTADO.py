@@ -33,7 +33,7 @@ for feature_1 in distancias:
             interacciones[f'{feature_1}-{feature_2}']=dataset[f'{feature_1}']*dataset[f'{feature_2}']/1000
 
 
-dataset = pd.concat([dataset,interacciones,oil_gas,campo,estado],axis=1)
+dataset = pd.concat([dataset,interacciones,oil_gas,campo,estado,lineamiento],axis=1)
 
 #SEPARO EN TRAIN Y TEST
 
