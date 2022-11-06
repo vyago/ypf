@@ -25,10 +25,10 @@ import lightgbm as lgb
 input='FE002'
 
 #COLOCO NOMBRE DEL EXPERIMENTO
-experimento=f"HT003-{input}"
+experimento=f"HT004-{input}"
 
 
-#Experimento aplicando codificación de target a las variables categóricas
+#Experimento aplicando codificación de target a las variables categóricas. Le sumo interacción entre las mismas
 # Debido a esto, no se podrá optimizar a traves de cross validation, solo podré hacer 1 validación.
 
 
@@ -50,6 +50,19 @@ X_train= enc.transform(X_train)
 X_test = enc.transform(X_test)
 X_train = X_train.select_dtypes("number")
 X_test = X_test[X_train.columns]
+
+# INTERACCIÓN ENTRE VARIABLES CATEGÓRICAS 
+
+var_cat = ['PAD_HIJO','HIJO','PADRE']
+
+for feature_1 in var_cat:
+    for feature_2 in var_cat:
+        if feature_1!=feature_2:
+            X_train[f'{feature_1}-{feature_2}'] = X_train[f'{feature_1}']*X_train[f'{feature_2}']  #CREO VARIABLES DE INTERACCIONES EN TRAIN
+            X_test[f'{feature_1}-{feature_2}'] = X_test[f'{feature_1}']*X_test[f'{feature_2}']  #CREO VARIABLES DE INTERACCIONES EN TEST
+
+
+
 
 
 MAX_EVALS = 500
@@ -77,7 +90,7 @@ def objective(params, n_folds = N_FOLDS):
    params["max_bin"] = 256
    params['objective'] = 'regression'
    params['feature_pre_filter'] = False
-   params['early_stopping_rounds'] = int(50+5/params["learning_rate"])
+   params['early_stopping_rounds'] = int(50+10/params["learning_rate"])
    params['metrics'] = 'rmse'
    # realiza n_folds de cross validation
    
@@ -113,10 +126,10 @@ def objective(params, n_folds = N_FOLDS):
            'status': STATUS_OK}
    
 space = {   
-'num_leaves': hp.quniform('num_leaves', 100, 2000, 1),
+'num_leaves': hp.quniform('num_leaves', 500, 1500, 1),
 'learning_rate': hp.loguniform('learning_rate', np.log(0.01),np.log(0.2)),
-'min_data_in_leaf': hp.quniform('min_data_in_leaf', 200, 4000, 5),
-'feature_fraction': hp.uniform('feature_fraction', 0.1, 1.0)
+'min_data_in_leaf': hp.quniform('min_data_in_leaf', 500, 1500, 5),
+'feature_fraction': hp.uniform('feature_fraction', 0.2, 0.5)
 }
    
    # Algoritmo de optimización
